@@ -34,8 +34,8 @@ class HangmanViewController: UIViewController {
   }
   
   func getWordsFromApi() {
-    let url:String = "http://linkedin-reach.hagbpyjegb.us-west-2.elasticbeanstalk.com/words"
-    let urlRequest = URL(string: url)
+    let urlString:String = "http://linkedin-reach.hagbpyjegb.us-west-2.elasticbeanstalk.com/words"
+    let url = URL(string: urlString)
     URLSession.shared.dataTask(with: urlRequest!) { (data, response, error) in
       if error != nil {
         print(error.debugDescription)
