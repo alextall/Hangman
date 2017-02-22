@@ -52,7 +52,7 @@ class HangmanViewController: UIViewController {
   
   func displayDashesForWord() -> String {
     var dashes = ""
-    for _ in 0..<self.correctHangmanWord.characters.count {
+    for _ in 0..<correctHangmanWord.characters.count {
       dashes += "-"
     }
     return dashes
@@ -74,8 +74,8 @@ class HangmanViewController: UIViewController {
   
   func updateGuessesLabels() {
     updateNumberOfGuesses()
-    self.guessesRemainingLabel.text = "\(guessesRemaining)"
-    self.incorrectGuessesLabel.text = "\(numberOfIncorrectGuesses)"
+    guessesRemainingLabel.text = "\(guessesRemaining)"
+    incorrectGuessesLabel.text = "\(numberOfIncorrectGuesses)"
     print("Match not found")
     
     // Image of Hangman body part appears
@@ -88,11 +88,11 @@ class HangmanViewController: UIViewController {
   }
   
   func checkUserLetter() {
-    guard let userGuess = self.letterTextField.text else { return }
+    guard let userGuess = letterTextField.text else { return }
     var correctLetters = [Int]()
     
     // Put the string from guessedAnswerLabel.text
-    guard let exampleDisplayAnswer = self.hangmanWordLabel.text else { return }
+    guard let exampleDisplayAnswer = hangmanWordLabel.text else { return }
     if correctHangmanWord.contains(userGuess) {
       print("Match Found")
       
@@ -113,7 +113,7 @@ class HangmanViewController: UIViewController {
      
       // Turns extraArray into a string and put into guessedAnswerLabel
       let newString = extraArray.map({"\($0)"}).joined(separator: "")
-      self.hangmanWordLabel.text = newString
+      hangmanWordLabel.text = newString
     } else {
       updateGuessesLabels()
     }
@@ -129,21 +129,21 @@ class HangmanViewController: UIViewController {
  
   func getRandomWord() -> String {
     let randomNumber = generateRandomNumber()
-    return self.linkedInWords[randomNumber]
+    return linkedInWords[randomNumber]
   }
   
   func generateRandomNumber() -> Int {
-    return Int(arc4random_uniform(UInt32(self.linkedInWords.count)))
+    return Int(arc4random_uniform(UInt32(linkedInWords.count)))
   }
   
   func revealHangmanWord() {
-    self.hangmanWordLabel.text = "\(self.correctHangmanWord)"
+    hangmanWordLabel.text = "\(correctHangmanWord)"
     userLost()
   }
   
   func playGame() {
-    self.correctHangmanWord = self.getRandomWord()
-    self.hangmanWordLabel.text = self.displayDashesForWord()
+    correctHangmanWord = getRandomWord()
+    hangmanWordLabel.text = displayDashesForWord()
   }
   
   
@@ -152,8 +152,8 @@ class HangmanViewController: UIViewController {
   }
   
   @IBAction func getNewWordButtonPressed(_ sender: Any) {
-    self.correctHangmanWord = self.getRandomWord()
-    self.hangmanWordLabel.text = self.displayDashesForWord()
+    correctHangmanWord = getRandomWord()
+    hangmanWordLabel.text = displayDashesForWord()
     resetNumberOfGuesses()
     userWonLabel.isHidden = true
     userLostLabel.isHidden = true
