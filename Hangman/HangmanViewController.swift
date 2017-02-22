@@ -35,13 +35,14 @@ class HangmanViewController: UIViewController {
   
   func getWordsFromApi() {
     let urlString:String = "http://linkedin-reach.hagbpyjegb.us-west-2.elasticbeanstalk.com/words"
-    let url = URL(string: urlString)
-    URLSession.shared.dataTask(with: urlRequest!) { (data, response, error) in
+    guard let url = URL(string: urlString) else { return }
+    URLSession.shared.dataTask(with: url) { (data, response, error) in
       if error != nil {
         print(error.debugDescription)
       } else {
-        let dataString = String(data: data!, encoding: .utf8)
-        self.linkedInWords = (dataString?.components(separatedBy: CharacterSet.newlines))!
+        guard let data = data,
+            let dataString = String(data: data, encoding: .utf8) else { return }
+        self.linkedInWords = dataString.components(separatedBy: CharacterSet.newlines)
         self.correctHangmanWord = self.getRandomWord()
         self.hangmanWordLabel.text = self.displayDashesForWord()
       }
@@ -86,25 +87,26 @@ class HangmanViewController: UIViewController {
   }
   
   func checkUserLetter() {
-    let userGuess = self.letterTextField.text
+    guard let userGuess = self.letterTextField.text else { return }
     var correctLetters = [Int]()
     
     // Put the string from guessedAnswerLabel.text
-    let exampleDisplayAnswer = self.hangmanWordLabel.text
-    if correctHangmanWord.contains(userGuess!) {
+    guard let exampleDisplayAnswer = self.hangmanWordLabel.text else { return }
+    if correctHangmanWord.contains(userGuess) {
       print("Match Found")
       
     // Turn answer into an array of characters
       let answerArray = Array(correctHangmanWord.characters)
-      var extraArray = Array(exampleDisplayAnswer!.characters)
+      var extraArray = Array(exampleDisplayAnswer.characters)
       
     // run the for loop that checks their character guess against each character in your answer, and saves the index of their guess into the correct letters array
       for char in 0...answerArray.count-1 {
         let newCharacter = String(answerArray[char])
-        if userGuess == newCharacter {
+        if userGuess == newCharacter,
+            let firstCharacter = userGuess.characters.first {
           correctLetters.append(char)
           extraArray.remove(at: char)
-          extraArray.insert(userGuess!.characters.first!, at: char)
+          extraArray.insert(firstCharacter, at: char)
         }
       }
      
