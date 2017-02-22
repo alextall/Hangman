@@ -37,15 +37,16 @@ class HangmanViewController: UIViewController {
     let urlString:String = "http://linkedin-reach.hagbpyjegb.us-west-2.elasticbeanstalk.com/words"
     guard let url = URL(string: urlString) else { return }
     URLSession.shared.dataTask(with: url) { (data, response, error) in
-      if error != nil {
-        print(error.debugDescription)
-      } else {
-        guard let data = data,
-            let dataString = String(data: data, encoding: .utf8) else { return }
+        guard error == nil,
+            let data = data,
+            let dataString = String(data: data, encoding: .utf8)
+            else {
+                return print(error.debugDescription)
+        }
+
         self.linkedInWords = dataString.components(separatedBy: CharacterSet.newlines)
         self.correctHangmanWord = self.getRandomWord()
         self.hangmanWordLabel.text = self.displayDashesForWord()
-      }
       } .resume()
   }
   
